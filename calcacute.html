@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title> Calculator</title>
+    <style>
+        /* CSS styles for the calculator */
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f2f2f2;
+            border-color: black;
+        }
+        
+        .result {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background-color: #fff;
+            border-radius: 0.5rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+            animation: pulse 1s ease-in-out infinite alternate;
+        }
+        
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .button {
+            font-size: 2rem;
+            padding: 1rem;
+            background-color: #fff;
+            border: none;
+            border-radius: 0.5rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+            transition: all 0.2s ease-in-out;
+        }
+        
+        .button:hover {
+            transform: translateY(-0.2rem);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.4);
+        }
+        
+        .button:active {
+            transform: translateY(0.2rem);
+            box-shadow: 0 0.2rem 0.5rem rgba(0, 0, 0, 0.4);
+        }
+        
+        @keyframes pulse {
+            from {
+                transform: scale(1);
+            }
+            to {
+                transform: scale(1.1);
+            }
+        }
+        
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="result">0</div>
+        <div class="buttons">
+            
+            <button class="button">7</button>
+            <button class="button">8</button>
+            <button class="button">9</button>
+            <button class="button">C</button>
+            <button class="button">4</button>
+            <button class="button">5</button>
+            <button class="button">6</button>
+            <button class="button">-</button>
+            <button class="button">1</button>
+            <button class="button">2</button>
+            <button class="button">3</button>
+            <button class="button">*</button>
+            <button class="button">0</button>
+            <button class="button">+</button>
+            <button class="button">=</button>
+            <button class="button">/</button>
+            <button class="button">.</button>
+            
+        </div>
+    </div>
+<script>
+ 
+  const result = document.querySelector(".result");
+  const buttons = document.querySelectorAll(".button");
+
+  buttons.forEach((button) => {
+    button.addEventListener("click", calculate);
+  });
+
+  function calculate(e) {
+    const currentResult = result.textContent;
+    const buttonValue = e.target.textContent;
+
+    if (currentResult === "0" && buttonValue !== "=") {
+      // If the current result is 0, replace it with the button value (except "=")
+      result.textContent = buttonValue;
+    } else if (buttonValue === "=") {
+      try {
+        // Use a try-catch block to handle potential errors (e.g., division by zero)
+        result.textContent = eval(currentResult);
+      } catch (error) {
+        result.textContent = "Error";
+      }
+    } else if (buttonValue === "C") {
+      result.textContent = "0"; // Clear the result
+    } else {
+      // Append the button value to the current result
+      result.textContent += buttonValue;
+    }
+  }
+
+
+
+document.addEventListener("keydown", handleKeyPress);
+
+function handleKeyPress(e) {
+    const key = e.key;
+    const allowedKeys = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ".", "+", "-", "*", "/", "=", "Enter", "Backspace", "Delete", "c", "C"];
+
+    if (allowedKeys.includes(key)) {
+        e.preventDefault();
+        const currentResult = result.textContent;
+
+        if (currentResult === "0" || currentResult === "Error") {
+            result.textContent = key;
+        } else if (key === "=" || key === "Enter") {
+            try {
+                result.textContent = eval(currentResult);
+            } catch (error) {
+                result.textContent = "Error"; // Handle invalid expressions
+            }
+        } else if (key === "C" || key === "c" || key === "Delete") {
+            result.textContent = "0"; // Clear the result
+        } else if (key === "Backspace") {
+            result.textContent = currentResult.slice(0, -1); // Remove the last character
+        } else {
+            result.textContent += key;
+        }
+    }
+}
+
+    </script>
+</body>
+</html>
+ 
